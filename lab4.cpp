@@ -6,6 +6,10 @@ using namespace std;
 
 void XORcipher(string, string);
 
+using namespace std;
+
+void cifradoCesar(string);
+
 int main()
 {
 	string palabra, clave;
@@ -28,6 +32,7 @@ int main()
 	return 0;
 }
 
+<<<<<<< HEAD
 string stringTobit(string txt)
 {
 	string bits = "";
@@ -80,4 +85,17 @@ void XORcipher(string palabra, string clave)
 	}
 	
 	cout << endl;
+=======
+void cifradoCesar(string texto)
+{
+	char textoCifrado[texto.size()];
+	for(int i = 0; i < texto.size(); i++)
+	{
+		if(texto[i] + 13 > 122)
+			textoCifrado[i] = ((texto[i] + 13) - 122) + 97;
+		else
+			textoCifrado[i] = texto[i] + 13;
+	}
+	cout << textoCifrado << endl;
+>>>>>>> 5248d5952fa13b1fd9a3db39639efd42b1809c73
 }
