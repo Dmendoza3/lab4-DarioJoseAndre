@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <string>
 #include <bitset>
 
@@ -6,27 +7,34 @@ using namespace std;
 
 void XORcipher(string, string);
 
-void cifradoCesar(string);
+string cifradoCesar(string);
+
+string Vigenere(string, string);
 
 int main()
 {
 	string palabra, clave;
 	
 	cout << "Ingrese la palabra a cifrar: ";
-	cin >> palabra;
+	//cin >> palabra;
+	getline(cin, palabra);
 
 	cout << "Ingrese la clave para usar en el cifrado: ";
 	cin >> clave;
 
-/*	cout << "Cifrado Vigenere: ";
-	Vigenere(clave, palabra);*/
+	cout << "Cifrado Vigenere: "
+	<< Vigenere(clave, palabra) << endl;
 	
-	cout << "Cifrado de Cesar: ";
-	cifradoCesar(palabra);
+	cout << "Cifrado de Cesar: "
+	<< cifradoCesar(palabra) << endl;
 	
 	cout << "Cifrado XOR: ";
 	XORcipher(palabra, clave);
 	
+
+	cout << endl << "Triple cifrado: ";
+	XORcipher(cifradoCesar(Vigenere(clave, palabra)), clave);
+
 	return 0;
 }
 
@@ -74,25 +82,78 @@ void XORcipher(string palabra, string clave)
 	//cout << endl  << "Cifrado(binario): " << cipherStr << endl;
 	
 	//cout << "Cifrado(Decimal): ";
-
+	
 	for(int i = 0; i <= cipherStr.size() / 8; i++) //Separar el binario
 	{
 		bitset<8> charBit(cipherStr.substr(i * 8,8));
 		cout << charBit.to_ulong() << " ";
 	}
-	
 	cout << endl;
 }
 
-void cifradoCesar(string texto)
+string cifradoCesar(string texto)
 {
-	char textoCifrado[texto.size()];
+	char textoCifrado[texto.size() + 1];
+	string textoCifradostr = "";
 	for(int i = 0; i < texto.size(); i++)
 	{
 		if(texto[i] + 13 > 122)
-			textoCifrado[i] = ((texto[i] + 13) - 122) + 97;
+			//textoCifrado[i] = ((texto[i] + 13) - 122) + 97;
+			textoCifradostr += ((texto[i] + 13) - 122) + 97;
 		else
-			textoCifrado[i] = texto[i] + 13;
+			//textoCifrado[i] = texto[i] + 13;
+			textoCifradostr = texto[i] + 13;
+
 	}
-	cout << textoCifrado << endl;
+	//cout << textoCifrado << endl;
+	return textoCifradostr;
+}
+
+string Vigenere(string clave, string texto){
+	char matriz[26][26];
+	int y2 =97;
+	for(int i =0; i<26; i++){
+	        y2 = i + 97;
+	        for(int j = 0; j<26; j++){
+	                if(y2 > 122){
+	                        y2 = 97;
+	                }
+	                matriz[i][j] = y2;
+	                //cout << "[" << matriz[i][j] << "]";
+	                ++y2;
+	
+	        }//cout << endl;
+	}
+	
+	string abc = "abcdefghijklmnopqrstuvwxyz";	
+
+	int cont = 0;
+
+	string cifrado = "";
+	for(int i = 0; i< texto.size(); i++){
+
+		if(texto[i] == ' '){
+			cifrado += " ";
+
+		}else{
+			int fil, col;
+	
+			col = abc.find(clave[cont]);
+			fil = abc.find(texto[i]);
+			
+			cifrado += matriz[fil][col];
+			
+	
+			cont++;
+			if(cont==clave.length()){
+				cont = 0;	
+			}
+		}
+
+	}
+	
+
+	//cout << cifrado << endl;
+	
+	return cifrado;
 }
